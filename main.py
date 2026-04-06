@@ -14,7 +14,7 @@ def main():
 
     targets = [
         {
-            "name": "자동차 기준 제작/개정",
+            "name": "사전규격공개",
             "url": os.getenv("TARGET_URL_prestrd_list"),
             "type": "prestrd_list",
             "storage_file": "last_id_prestrd_list.txt"
