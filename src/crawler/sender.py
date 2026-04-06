@@ -8,11 +8,11 @@ load_dotenv()
 
 class MailSender:
     def __init__(self):
-        self.smtp_server = os.getenv("SMTP_SERVER")
-        self.smtp_port = os.getenv("SMTP_PORT")
-        self.smtp_user = os.getenv("SMTP_USER")
-        self.smtp_password = os.getenv("SMTP_PASSWORD")
-        self.receiver_email = os.getenv("RECEIVER_EMAIL")
+        self.smtp_server = os.environ.get("SMTP_SERVER")
+        self.smtp_port = os.environ.get("SMTP_PORT")
+        self.smtp_user = os.environ.get("SMTP_USER")
+        self.smtp_password = os.environ.get("SMTP_PASSWORD")
+        self.receiver_email = os.environ.get("RECEIVER_EMAIL")
 
     def send(self, section_results: dict[str, list[dict]]):
         total_count = sum(len(items) for items in section_results.values())
