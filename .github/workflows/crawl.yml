@@ -23,8 +23,8 @@ jobs:
 
       - name: Run crawler
         env:
-          TARGET_URL_PRESTRD: ${{ secrets.TARGET_URL_prestrd_list }}
-          TARGET_URL_KATRI: ${{ secrets.TARGET_URL_katri_list }}
+          TARGET_URL_prestrd_list: ${{ secrets.TARGET_URL_prestrd_list }}
+          TARGET_URL_katri_list: ${{ secrets.TARGET_URL_katri_list }}
           SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
           SMTP_PORT: ${{ secrets.SMTP_PORT }}
           SMTP_USER: ${{ secrets.SMTP_USER }}
