@@ -1,0 +1,41 @@
+name: Kotsa Crawler Bot
+
+on:
+  schedule:
+    - cron: '0 * * * *' # 매 시간 정각에 실행
+  workflow_dispatch: # 수동 실행 가능
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install requests beautifulsoup4 python-dotenv
+
+      - name: Run crawler
+        env:
+          TARGET_URL_PRESTRD: ${{ secrets.TARGET_URL_prestrd_list }}
+          TARGET_URL_KATRI: ${{ secrets.TARGET_URL_katri_list }}
+          SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          RECEIVER_EMAIL: ${{ secrets.RECEIVER_EMAIL }}
+        run: python main.py
+
+      - name: Commit and Push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add last_id_*.txt
+          git commit -m "docs: update last_id [skip ci]" || echo "No changes to commit"
+          git push
