@@ -1,6 +1,7 @@
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from email.utils import formataddr
 import os
 from dotenv import load_dotenv
 
@@ -8,11 +9,12 @@ load_dotenv()
 
 class MailSender:
     def __init__(self):
-        self.smtp_server = os.environ.get("SMTP_SERVER")
-        self.smtp_port = os.environ.get("SMTP_PORT")
-        self.smtp_user = os.environ.get("SMTP_USER")
-        self.smtp_password = os.environ.get("SMTP_PASSWORD")
-        self.receiver_email = os.environ.get("RECEIVER_EMAIL")
+        self.smtp_server = os.getenv("SMTP_SERVER")
+        self.smtp_port = os.getenv("SMTP_PORT")
+        self.smtp_user = os.getenv("SMTP_USER")
+        self.smtp_password = os.getenv("SMTP_PASSWORD")
+        self.receiver_email = os.getenv("RECEIVER_EMAIL")
+        self.sender_name = os.getenv('SENDER_NAME', '저먼코리아 알림봇')
 
     def send(self, section_results: dict[str, list[dict]]):
         total_count = sum(len(items) for items in section_results.values())
@@ -67,15 +69,14 @@ class MailSender:
         """
 
         msg = MIMEMultipart("alternative")
-        msg['From'] = self.smtp_user
+        msg['From'] = formataddr((self.sender_name, self.smtp_user))
         msg['To'] = self.receiver_email
         msg['Subject'] = subject
 
         msg.attach(MIMEText(text_body, 'plain'))
         msg.attach(MIMEText(html_body, 'html'))
 
-        with smtplib.SMTP(self.smtp_server, self.smtp_port) as server:
-            server.starttls()
+        with smtplib.SMTP_SSL(self.smtp_server, self.smtp_port) as server:
             server.login(self.smtp_user, self.smtp_password)
             server.send_message(msg)
             print(f"메일 발송 성공: {self.receiver_email}")

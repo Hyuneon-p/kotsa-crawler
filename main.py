@@ -15,13 +15,13 @@ def main():
     targets = [
         {
             "name": "자동차 기준 제작/개정",
-            "url": os.environ.get("TARGET_URL_prestrd_list"),
+            "url": os.getenv("TARGET_URL_prestrd_list"),
             "type": "prestrd_list",
             "storage_file": "last_id_prestrd_list.txt"
         },
         {
             "name": "일반 공지",
-            "url": os.environ.get("TARGET_URL_katri_list"),
+            "url": os.getenv("TARGET_URL_katri_list"),
             "type": "katri_list",
             "storage_file": "last_id_katri_list.txt"
         }
