@@ -5,6 +5,7 @@ class KotsaParser:
     def __init__(self):
         self.base_url_prestrd_list = "https://main.kotsa.or.kr/portal/bbs/prestrd_view.do"   
         self.base_url_katri_list = "https://katri.kotsa.or.kr/web/contents/katri301.do"
+        self.base_url_tendnoti_list = "https://main.kotsa.or.kr/portal/bbs/tendnoti_view.do"
 
     def parse_list(self, html: str, site_type: str) -> list[dict]:
         soup = bs(html, 'html.parser')
@@ -15,16 +16,24 @@ class KotsaParser:
         elif site_type == "katri_list": 
             # 카트리 > 알림 마당 > 일반 공지
             rows = soup.select('#container > section > section.content > div.board-wrap > div.board-common > ul.board-list > li')
+        elif site_type == "tendnoti_list":
+            # 입찰 소식 > 입찰 공고
+            rows = soup.select('#content > table > tbody > tr')
         parsed_data = []
 
         for row in rows:
             # 사이트에 따라서 파싱할 값 지정함. (아오.. 지 혼자 span.num이네..)
             if site_type == "prestrd_list":
-                num_td = row.select_one('td:nth-child(1)')
-                link_tag = row.select_one('td a')
+                num_td = row.select_one('td[data-bbsbody="number"]')
+                link_tag = row.select_one('td[data-bbsbody="subject"] a')
             elif site_type == "katri_list":
                 num_td = row.select_one('span.num')
                 link_tag = row.select_one('li a')
+            elif site_type == "tendnoti_list":
+                # num_td == row.select_one('td:nth-child(1)')
+                # link_tag = row.select_one('td a')
+                num_td = row.select_one('td[data-bbsbody="number"]')
+                link_tag = row.select_one('td[data-bbsbody="subject"] a')
 
             # num_td가 존재하지 않거나 숫자가 아닌 경우 해당 행은 append 하지 않고 무시함.
             if not num_td or not num_td.text.strip().isdigit():
@@ -62,6 +71,12 @@ class KotsaParser:
                     # f"{self.base_url_katri_list}?schM={params[0]}&page={params[1]}&"
                     # f"viewCount={params[2]}&id={params[3]}&schBdcode={params[4]}&"
                     # f"schGroupCode={params[5]}"
+                )
+            elif site_type == "tendnoti_list" and len(params) >= 7:
+                post_url = (
+                    f"{self.base_url_tendnoti_list}?bbscCode={params[0]}&cateCode={params[1]}&"
+                    f"bbscSeqn={params[2]}&pageNumb={params[3]}&sechCdtn={params[4]}&"
+                    f"sechKywd={params[5]}&menuCode={params[6]}"
                 )
             else:
                 post_url = "#"

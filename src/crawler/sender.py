@@ -36,6 +36,7 @@ class MailSender:
             """
             
             for item in items:
+                print(item['url'])
                 text_body += f"- {item['title']}\n  링크: {item['url']}\n\n"
                 html_sections += f"""
                 <div style="padding: 15px; border: 1px solid #eee; border-radius: 8px; margin-bottom: 10px; background-color: #fafafa;">

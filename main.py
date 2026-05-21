@@ -20,11 +20,17 @@ def main():
             "storage_file": "last_id_prestrd_list.txt"
         },
         {
+            "name": "입찰공고 공지",
+            "url": os.getenv("TARGET_URL_tendnoti_list"),
+            "type": "tendnoti_list",
+            "storage_file": "last_id_tendnoti_list.txt"
+        },
+        {
             "name": "일반 공지",
             "url": os.getenv("TARGET_URL_katri_list"),
             "type": "katri_list",
             "storage_file": "last_id_katri_list.txt"
-        }
+        },
     ]
 
     all_new_items = {}
