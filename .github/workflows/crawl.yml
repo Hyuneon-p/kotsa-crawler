@@ -25,6 +25,7 @@ jobs:
         env:
           TARGET_URL_prestrd_list: ${{ secrets.TARGET_URL_prestrd_list }}
           TARGET_URL_katri_list: ${{ secrets.TARGET_URL_katri_list }}
+          TARGET_URL_tendnoti_list: ${{ secrets.TARGET_URL_tendnoti_list }}
           SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
           SMTP_PORT: ${{ secrets.SMTP_PORT }}
           SMTP_USER: ${{ secrets.SMTP_USER }}
